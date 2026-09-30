@@ -6,14 +6,14 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:diamond"
+      "tag": "c:ingots/bronze"
     },
     "/": {
       "item": "minecraft:stick"
     }
   },
   "result": {
-    "id": "basicweapons:diamond_dagger",
+    "id": "basicweapons:bronze_dagger",
     "count": 1
   },
   "fabric:load_conditions": [

@@ -23,9 +23,11 @@ public class ClubItem extends BasicWeaponSweeplessItem {
 
   @Override
   public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-    Player player = (Player) attacker;
-    float f2 = ((PlayerEntityAccessor) player).bw$getCooldown(0.5f);
-    if (f2 > 0.9F) {
+    float attackStrength = 1.0F;
+    if (attacker instanceof Player player) {
+      attackStrength = ((PlayerEntityAccessor) player).bw$getCooldown(0.5f);
+    }
+    if (attackStrength > 0.9F) {
       target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 15));
     }
     stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND);

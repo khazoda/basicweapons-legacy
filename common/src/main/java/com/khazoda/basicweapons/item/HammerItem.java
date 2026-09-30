@@ -21,9 +21,11 @@ public class HammerItem extends BasicWeaponSweeplessItem {
 
   @Override
   public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-    Player player = (Player) attacker;
-    float f2 = ((PlayerEntityAccessor) player).bw$getCooldown(0.5f);
-    if (f2 >= 0.9F) {
+    float attackStrength = 1.0F;
+    if (attacker instanceof Player player) {
+      attackStrength = ((PlayerEntityAccessor) player).bw$getCooldown(0.5f);
+    }
+    if (attackStrength >= 0.9F) {
       /* If entity is a player */
       if (target.isAlwaysTicking()) {
         Vec3 currentMovement = target.getDeltaMovement();
