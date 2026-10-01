@@ -7,6 +7,7 @@ import com.khazoda.basicweapons.Constants;
 import com.khazoda.basicweapons.platform.Services;
 import com.khazoda.basicweapons.registry.WeaponRegistry;
 import com.khazoda.basicweapons.registry.WeaponRegistry.MaterialEntry;
+import com.khazoda.basicweapons.struct.WeaponType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Rarity;
@@ -108,7 +109,7 @@ public class MaterialPackLoader {
     Optional<List<ValidatedMaterial>> validatedMaterials = validateMaterialsFromPack(packFolder, packName);
     if (validatedMaterials.isEmpty()) return;
 
-    commitMaterials(packName, validatedMaterials.get());
+    commitMaterials(packFolder, packName, validatedMaterials.get());
     copyResourcePackContent(packFolder, packName);
     copyDataPackContent(packFolder, packName);
     initiallyLoadedPacks.add(packName);
@@ -307,19 +308,31 @@ public class MaterialPackLoader {
     return Optional.of(validatedMaterials);
   }
 
-  private static void commitMaterials(String packName, List<ValidatedMaterial> validatedMaterials) {
+  private static void commitMaterials(File packFolder, String packName, List<ValidatedMaterial> validatedMaterials) {
     for (ValidatedMaterial material : validatedMaterials) {
       loadedMaterials.put(material.name(), material.tier());
       materialToDatapackName.put(material.name(), packName);
     }
 
     for (ValidatedMaterial material : validatedMaterials) {
-      Constants.LOG.info("'{}' material found. smithing new weapons..", material.name());
-      WeaponRegistry.registerAllWeaponsForMaterial(
-      new MaterialEntry(material.tier(), material.name(), settings -> {
-        if (material.fireproof()) settings.fireResistant();
-        return settings.rarity(material.rarity());
-      }));
+      File textureFolder = new File(packFolder, ASSETS_PATH + "/basicweapons/textures/item");
+      String texturePrefix = material.name() + "_";
+      List<WeaponType> weaponTypes = Arrays.stream(WeaponType.values())
+          .filter(type -> new File(textureFolder, texturePrefix + type.getId() + ".png").isFile())
+          .toList();
+      File[] materialTextures = textureFolder.listFiles(file -> file.isFile()
+          && file.getName().startsWith(texturePrefix)
+          && file.getName().endsWith(".png")
+          && !file.getName().endsWith("_held.png"));
+      int invalidTextures = materialTextures == null ? 0 : materialTextures.length - weaponTypes.size();
+
+      WeaponRegistry.registerWeaponsForMaterial(
+          new MaterialEntry(material.tier(), material.name(), settings -> {
+            if (material.fireproof()) settings.fireResistant();
+            return settings.rarity(material.rarity());
+          }), weaponTypes);
+      Constants.LOG.info("'{}' material found. adding {} weapons and skipping {} invalid ones",
+          material.name(), weaponTypes.size(), invalidTextures);
     }
   }
 

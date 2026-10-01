@@ -1,7 +1,6 @@
 package com.khazoda.basicweapons.registry;
 
 import com.khazoda.basicweapons.material.ConditionalToolMaterials;
-import com.khazoda.basicweapons.materialpack.MaterialPackLoader;
 import com.khazoda.basicweapons.struct.WeaponType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
@@ -38,9 +37,13 @@ public class WeaponRegistry {
 
   }
 
-  /* Register weapons from MaterialEntry */
+  /* Register every weapon for built-in materials. */
   public static void registerAllWeaponsForMaterial(MaterialEntry material) {
-    for (WeaponType type : WeaponType.values()) {
+    registerWeaponsForMaterial(material, Arrays.asList(WeaponType.values()));
+  }
+
+  public static void registerWeaponsForMaterial(MaterialEntry material, Iterable<WeaponType> weaponTypes) {
+    for (WeaponType type : weaponTypes) {
       String itemId = material.prefix() + "_" + type.getId();
       Item.Properties itemSettings = material.settingsModifier().apply(new Item.Properties());
 
@@ -54,12 +57,6 @@ public class WeaponRegistry {
       ITEMS_BY_TYPE.computeIfAbsent(type, k -> new ArrayList<>()).add(itemSupplier);
       ITEMS_BY_MATERIAL.computeIfAbsent(material.material(), k -> new ArrayList<>()).add(itemSupplier);
     }
-  }
-
-  /* Register weapons from string of material name (used for material packs) */
-  public static void registerAllWeaponsForMaterial(String materialName) {
-    Tier material = MaterialPackLoader.getMaterial(materialName);
-    registerAllWeaponsForMaterial(new MaterialEntry(material, materialName));
   }
 
   public static List<Item> getItemsByType(WeaponType type) {
