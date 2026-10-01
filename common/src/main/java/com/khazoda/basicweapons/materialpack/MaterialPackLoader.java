@@ -6,7 +6,10 @@ import com.google.gson.JsonObject;
 import com.khazoda.basicweapons.Constants;
 import com.khazoda.basicweapons.platform.Services;
 import com.khazoda.basicweapons.registry.WeaponRegistry;
+import com.khazoda.basicweapons.registry.WeaponRegistry.MaterialEntry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.Tier;
 import org.apache.commons.io.FileUtils;
 
@@ -288,8 +291,14 @@ public class MaterialPackLoader {
           throw new IllegalArgumentException("repair_ingredient must be a valid item or item tag identifier");
         }
 
+        if (json.has("fireproof") && !GsonHelper.isBooleanValue(json, "fireproof")) {
+          throw new IllegalArgumentException("fireproof must be a boolean");
+        }
+        boolean fireproof = GsonHelper.getAsBoolean(json, "fireproof", false);
+        Rarity rarity = Rarity.valueOf(GsonHelper.getAsString(json, "rarity", "common").toUpperCase(Locale.ROOT));
+
         EarlyLoadedMaterial material = new EarlyLoadedMaterial(materialName, durability, attack_damage_bonus, attack_speed_bonus, reach_bonus, enchantability, repair_ingredient);
-        validatedMaterials.add(new ValidatedMaterial(materialName, material.createTier()));
+        validatedMaterials.add(new ValidatedMaterial(materialName, material.createTier(), fireproof, rarity));
       } catch (Exception e) {
         Constants.LOG.error("Rejecting material pack {} because {} is invalid: {}", packName, file.getName(), e.getMessage());
         return Optional.empty();
@@ -306,11 +315,15 @@ public class MaterialPackLoader {
 
     for (ValidatedMaterial material : validatedMaterials) {
       Constants.LOG.info("'{}' material found. smithing new weapons..", material.name());
-      WeaponRegistry.registerAllWeaponsForMaterial(material.name());
+      WeaponRegistry.registerAllWeaponsForMaterial(
+      new MaterialEntry(material.tier(), material.name(), settings -> {
+        if (material.fireproof()) settings.fireResistant();
+        return settings.rarity(material.rarity());
+      }));
     }
   }
 
-  private record ValidatedMaterial(String name, Tier tier) {}
+  private record ValidatedMaterial(String name, Tier tier, boolean fireproof, Rarity rarity) {}
 
   public static Tier getMaterial(String name) {
     return loadedMaterials.get(name);
