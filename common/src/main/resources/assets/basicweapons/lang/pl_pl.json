@@ -55,5 +55,20 @@
   "item.basicweapons.netherite_glaive": "Netherytowy Glewia",
   "tag.item.basicweapons.tools.glaives": "Glewie",
   "tag.item.c.tools.glaives": "Glewie",
-  "tag.item.c.tools.melee_weapons": "Broń Biała"
+  "tag.item.c.tools.melee_weapons": "Broń Biała",
+  "item.basicweapons.copper_dagger": "Miedziany Sztylet",
+  "item.basicweapons.copper_hammer": "Miedziany Młot",
+  "item.basicweapons.copper_club": "Miedziana Maczuga",
+  "item.basicweapons.copper_spear": "Miedziana Włócznia",
+  "item.basicweapons.copper_quarterstaff": "Miedziany Kij",
+  "item.basicweapons.copper_glaive": "Miedziana Glewia",
+  "enchantment.basicweapons.might.desc": "Zwiększa obrażenia zadawane przez przedmiot.",
+  "itemGroup.basicweapons.main": "Podstawowe bronie",
+  "itemGroup.basicweapons.materialpack": "Bronie Materialpack",
+  "item.basicweapons.tin_dagger": "Cynowy Sztylet",
+  "item.basicweapons.tin_hammer": "Cynowy Młot",
+  "item.basicweapons.tin_club": "Cynowa Maczuga",
+  "item.basicweapons.tin_spear": "Cynowa Włócznia",
+  "item.basicweapons.tin_quarterstaff": "Cynowy Kij",
+  "item.basicweapons.tin_glaive": "Cynowa Glewia"
 }

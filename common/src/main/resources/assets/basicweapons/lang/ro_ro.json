@@ -45,5 +45,15 @@
   "item.basicweapons.bronze_club": "Bâtă de bronz",
   "item.basicweapons.bronze_spear": "Suliță de bronz",
   "item.basicweapons.bronze_quarterstaff": "Pătrime de toiag de bronz",
-  "tag.item.c.ingots.bronze": "Lingouri de bronz"
+  "tag.item.c.ingots.bronze": "Lingouri de bronz",
+  "item.basicweapons.wooden_glaive": "Spadă de lemn",
+  "item.basicweapons.stone_glaive": "Spadă de piatră",
+  "item.basicweapons.iron_glaive": "Spadă de fier",
+  "item.basicweapons.bronze_glaive": "Spadă de bronz",
+  "item.basicweapons.golden_glaive": "Spadă de aur",
+  "item.basicweapons.diamond_glaive": "Spadă de diamant",
+  "item.basicweapons.netherite_glaive": "Spadă de netherit",
+  "tag.item.basicweapons.tools.glaives": "Spade",
+  "tag.item.c.tools.glaives": "Spade",
+  "tag.item.c.tools.melee_weapons": "Arme"
 }

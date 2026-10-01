@@ -54,5 +54,6 @@
   "item.basicweapons.diamond_glaive": "Guja de Diamante",
   "item.basicweapons.netherite_glaive": "Guja de Netherita",
   "tag.item.basicweapons.tools.glaives": "Gujas",
-  "tag.item.c.tools.glaives": "Gujas"
+  "tag.item.c.tools.glaives": "Gujas",
+  "tag.item.c.tools.melee_weapons": "armas cuerpo a cuerpo"
 }

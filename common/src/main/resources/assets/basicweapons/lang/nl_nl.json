@@ -54,5 +54,11 @@
   "item.basicweapons.diamond_glaive": "Diamanten Glaif",
   "item.basicweapons.netherite_glaive": "Netherieten Glaif",
   "tag.item.basicweapons.tools.glaives": "Glaifs",
-  "tag.item.c.tools.glaives": "Glaifs"
+  "tag.item.c.tools.glaives": "Glaifs",
+  "item.basicweapons.copper_dagger": "Koperen Dolk",
+  "item.basicweapons.copper_hammer": "Koperen Hamer",
+  "item.basicweapons.copper_club": "Koperen Knots",
+  "item.basicweapons.copper_spear": "Koperen Speer",
+  "item.basicweapons.copper_quarterstaff": "Koperen Kwartstaf",
+  "item.basicweapons.copper_glaive": "Koperen Glaif"
 }
