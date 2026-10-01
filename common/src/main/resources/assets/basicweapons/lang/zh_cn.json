@@ -55,5 +55,20 @@
   "item.basicweapons.netherite_glaive": "下界合金长刀",
   "tag.item.basicweapons.tools.glaives": "长刀",
   "tag.item.c.tools.glaives": "长刀",
-  "tag.item.c.tools.melee_weapons": "近战武器"
+  "tag.item.c.tools.melee_weapons": "近战武器",
+  "item.basicweapons.copper_dagger": "铜匕首",
+  "item.basicweapons.copper_hammer": "铜锤",
+  "item.basicweapons.copper_club": "铜棒",
+  "item.basicweapons.copper_spear": "铜矛",
+  "item.basicweapons.copper_quarterstaff": "铜长棍",
+  "item.basicweapons.copper_glaive": "铜长刀",
+  "enchantment.basicweapons.might.desc": "增加物品造成的伤害。",
+  "itemGroup.basicweapons.main": "基础武器",
+  "itemGroup.basicweapons.materialpack": "基础武器丨内容包",
+  "item.basicweapons.tin_dagger": "锡匕首",
+  "item.basicweapons.tin_hammer": "锡锤",
+  "item.basicweapons.tin_club": "锡棒",
+  "item.basicweapons.tin_spear": "锡矛",
+  "item.basicweapons.tin_quarterstaff": "锡长棍",
+  "item.basicweapons.tin_glaive": "锡长刀"
 }

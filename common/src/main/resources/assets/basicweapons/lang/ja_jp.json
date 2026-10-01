@@ -54,5 +54,12 @@
   "item.basicweapons.diamond_glaive": "ダイヤモンドの薙刀",
   "item.basicweapons.netherite_glaive": "ネザライトの薙刀",
   "tag.item.basicweapons.tools.glaives": "薙刀",
-  "tag.item.c.tools.glaives": "薙刀"
+  "tag.item.c.tools.glaives": "薙刀",
+  "item.basicweapons.copper_dagger": "銅のダガー",
+  "item.basicweapons.copper_hammer": "銅のハンマー",
+  "item.basicweapons.copper_club": "銅の棍棒",
+  "item.basicweapons.copper_spear": "銅の槍",
+  "item.basicweapons.copper_quarterstaff": "銅のクォータースタッフ",
+  "item.basicweapons.copper_glaive": "銅の薙刀",
+  "enchantment.basicweapons.might.desc": "アイテムのダメージを高める。"
 }

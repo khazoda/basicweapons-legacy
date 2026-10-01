@@ -55,5 +55,11 @@
   "item.basicweapons.netherite_glaive": "Netherit Glefe",
   "tag.item.basicweapons.tools.glaives": "Glefen",
   "tag.item.c.tools.glaives": "Glefen",
-  "tag.item.c.tools.melee_weapons": "Nahkampfwaffen"
+  "tag.item.c.tools.melee_weapons": "Nahkampfwaffen",
+  "item.basicweapons.copper_dagger": "Kupferdolch",
+  "item.basicweapons.copper_hammer": "Kupferhammer",
+  "item.basicweapons.copper_club": "Kupferkeule",
+  "item.basicweapons.copper_spear": "Kupferspeer",
+  "item.basicweapons.copper_quarterstaff": "Kupferkampfstab",
+  "item.basicweapons.copper_glaive": "Kupfer Glefe"
 }

@@ -71,6 +71,8 @@
   "item.basicweapons.tin_spear": "Tin Spear",
   "item.basicweapons.tin_quarterstaff": "Tin Quarterstaff",
   "item.basicweapons.tin_glaive": "Tin Glaive",
+  "config.basicweapons.enable_loot_table_population": "Vanilla Loot Table Population",
+  "config.basicweapons.enable_mob_weapon_equipment": "Mob Weapon Equipment",
   "item.basicweapons.wooden_pike": "Wooden Pike",
   "item.basicweapons.stone_pike": "Stone Pike",
   "item.basicweapons.copper_pike": "Copper Pike",
