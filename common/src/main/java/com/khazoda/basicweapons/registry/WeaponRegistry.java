@@ -44,6 +44,10 @@ public class WeaponRegistry {
     }
   }
 
+  public static boolean isBuiltInMaterialName(String materialName) {
+    return VANILLA_MATERIALS.stream().anyMatch(material -> material.prefix().equals(materialName)) || (bronze_mod_loaded && COMPAT_MATERIALS.stream().anyMatch(material -> material.prefix().equals(materialName)));
+  }
+
   public static void registerWeaponForMaterial(WeaponTypeInterface type, MaterialEntry material) {
     String itemId = material.prefix() + "_" + type.getId();
     Item.Properties itemSettings = material.settingsModifier().apply(new Item.Properties());
