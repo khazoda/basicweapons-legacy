@@ -1,7 +1,6 @@
 package com.khazoda.basicweapons.registry;
 
 import com.khazoda.basicweapons.material.ConditionalToolMaterials;
-import com.khazoda.basicweapons.materialpack.MaterialPackLoader;
 import com.khazoda.basicweapons.struct.WeaponType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -31,19 +30,8 @@ public class WeaponRegistry {
   private static final Map<ToolMaterial, List<Item>> CACHED_MATERIAL_ITEMS = new ConcurrentHashMap<>();
   private static final Map<ITEMS_BY_TYPE, Map<WeaponTypeInterface, List<Item>>> CACHED_TYPED_ITEMS = new ConcurrentHashMap<>();
 
-  public static final List<MaterialEntry> VANILLA_MATERIALS = Arrays.asList(
-      new MaterialEntry(ToolMaterial.WOOD, "wooden"),
-      new MaterialEntry(ToolMaterial.STONE, "stone"),
-      new MaterialEntry(ToolMaterial.COPPER, "copper"),
-      new MaterialEntry(ToolMaterial.IRON, "iron"),
-      new MaterialEntry(ToolMaterial.GOLD, "golden"),
-      new MaterialEntry(ToolMaterial.DIAMOND, "diamond"),
-      new MaterialEntry(ToolMaterial.NETHERITE, "netherite", Item.Properties::fireResistant)
-  );
-  public static final List<MaterialEntry> COMPAT_MATERIALS = Arrays.asList(
-      new MaterialEntry(ConditionalToolMaterials.BRONZE, "bronze"),
-      new MaterialEntry(ConditionalToolMaterials.TIN, "tin")
-  );
+  public static final List<MaterialEntry> VANILLA_MATERIALS = Arrays.asList(new MaterialEntry(ToolMaterial.WOOD, "wooden"), new MaterialEntry(ToolMaterial.STONE, "stone"), new MaterialEntry(ToolMaterial.COPPER, "copper"), new MaterialEntry(ToolMaterial.IRON, "iron"), new MaterialEntry(ToolMaterial.GOLD, "golden"), new MaterialEntry(ToolMaterial.DIAMOND, "diamond"), new MaterialEntry(ToolMaterial.NETHERITE, "netherite", Item.Properties::fireResistant));
+  public static final List<MaterialEntry> COMPAT_MATERIALS = Arrays.asList(new MaterialEntry(ConditionalToolMaterials.BRONZE, "bronze"), new MaterialEntry(ConditionalToolMaterials.TIN, "tin"));
 
   public static void init() {
     for (MaterialEntry material : VANILLA_MATERIALS) {
@@ -67,9 +55,7 @@ public class WeaponRegistry {
     ResourceKey<Item> resourceKey = ResourceKey.create(Registries.ITEM, ID(itemId));
     Item.Properties finalProperties = itemSettings.setId(resourceKey);
 
-    Supplier<Item> itemSupplier = ITEM_REGISTRAR.register(itemId, () ->
-        type.create(material.material, damageModifier, speedModifier, reachModifier, finalProperties)
-    );
+    Supplier<Item> itemSupplier = ITEM_REGISTRAR.register(itemId, () -> type.create(material.material, damageModifier, speedModifier, reachModifier, finalProperties));
 
     ITEMS.put(itemId, itemSupplier);
 
@@ -88,31 +74,15 @@ public class WeaponRegistry {
     }
   }
 
-  /* Register weapons from string of material name (used for material packs) */
-  public static void registerAllWeaponsForMaterialPackMaterial(String materialName) {
-    ToolMaterial material = MaterialPackLoader.getMaterial(materialName);
-    MaterialEntry materialEntry = new MaterialEntry(material, materialName);
-
-    // Register BasicWeaponType weapons (dagger, hammer, club, etc.) only if textures exist
-    for (WeaponType.BasicWeaponType type : WeaponType.BasicWeaponType.values()) {
-      if (MaterialPackLoader.hasTextureForWeaponType(materialName, type.getId())) {
-        registerWeaponForMaterial(type, materialEntry);
-      }
-    }
-
-    // Register VanillaWeaponType weapons (sword, axe, spear) only if textures exist
-    for (WeaponType.VanillaWeaponType type : WeaponType.VanillaWeaponType.values()) {
-      if (MaterialPackLoader.hasTextureForWeaponType(materialName, type.getId())) {
-        registerWeaponForMaterial(type, materialEntry);
-      }
+  public static void registerWeaponsForMaterial(MaterialEntry material, Iterable<? extends WeaponTypeInterface> weaponTypes) {
+    for (WeaponTypeInterface type : weaponTypes) {
+      registerWeaponForMaterial(type, material);
     }
   }
 
   /* ITEMS_BY_TYPE retrieval options for tab registry */
   public enum ITEMS_BY_TYPE {
-    ALL,
-    BUILTIN,
-    MATERIALPACK
+    ALL, BUILTIN, MATERIALPACK
   }
 
   /* Retrieve items by type (built-in/materialpack) */

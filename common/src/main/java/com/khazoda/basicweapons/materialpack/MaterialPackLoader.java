@@ -6,6 +6,10 @@ import com.google.gson.JsonObject;
 import com.khazoda.basicweapons.Constants;
 import com.khazoda.basicweapons.platform.Services;
 import com.khazoda.basicweapons.registry.WeaponRegistry;
+import com.khazoda.basicweapons.registry.WeaponRegistry.MaterialEntry;
+import com.khazoda.basicweapons.struct.WeaponType;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.ToolMaterial;
 import org.apache.commons.io.FileUtils;
 
@@ -30,7 +34,6 @@ public class MaterialPackLoader {
   public static final Map<String, EarlyLoadedMaterial> loadedMaterials = new HashMap<>();
   private static final Map<ToolMaterial, EarlyLoadedMaterial> toolMaterialMap = new HashMap<>();
   private static final Map<String, String> materialToDatapackName = new HashMap<>();
-  private static final Map<String, File> materialToPackFolder = new HashMap<>();
   private static final Set<String> initiallyLoadedPacks = new HashSet<>();
   private static boolean hasInitialized = false;
 
@@ -258,16 +261,33 @@ public class MaterialPackLoader {
         int enchantability = json.get("enchantability").getAsInt();
         String repair_ingredient = json.get("repair_ingredient").getAsString();
 
+        if (json.has("fireproof") && !GsonHelper.isBooleanValue(json, "fireproof")) {
+          throw new IllegalArgumentException("fireproof must be a boolean");
+        }
+        boolean fireproof = GsonHelper.getAsBoolean(json, "fireproof", false);
+        Rarity rarity = Rarity.valueOf(GsonHelper.getAsString(json, "rarity", "common").toUpperCase(Locale.ROOT));
+
         EarlyLoadedMaterial material = new EarlyLoadedMaterial(material_name, durability, attack_damage_bonus, mining_speed, attack_speed_bonus, reach_bonus, enchantability, repair_ingredient);
         ToolMaterial toolMaterial = material.createToolMaterial();
         toolMaterialMap.put(toolMaterial, material);
         loadedMaterials.put(material_name, material);
         materialToDatapackName.put(material_name, packFolder.getName());
-        materialToPackFolder.put(material_name, packFolder);
-        Constants.LOG.info("[{}] material loaded.", material_name);
-        // Constants.LOG.info("Loaded material '{}' from '{}' with stats: [durability '{}'], [attack damage bonus '{}'], [attack speed bonus '{}'], [enchantability '{}'], [repair ingredient '{}']", material_name, packFolder.getName(), durability,attack_damage_bonus, attack_speed_bonus, enchantability,repair_ingredient);
 
-        WeaponRegistry.registerAllWeaponsForMaterialPackMaterial(material_name);
+        List<WeaponType.WeaponTypeInterface> supportedTypes = new ArrayList<>();
+        supportedTypes.addAll(Arrays.asList(WeaponType.BasicWeaponType.values()));
+        supportedTypes.addAll(Arrays.asList(WeaponType.VanillaWeaponType.values()));
+
+        File textureFolder = new File(packFolder, ASSETS_PATH + "/basicweapons/textures/item");
+        String texturePrefix = material_name + "_";
+        List<WeaponType.WeaponTypeInterface> weaponTypes = supportedTypes.stream().filter(type -> new File(textureFolder, texturePrefix + type.getId() + ".png").isFile()).toList();
+        File[] materialTextures = textureFolder.listFiles(textureFile -> textureFile.isFile() && textureFile.getName().startsWith(texturePrefix) && textureFile.getName().endsWith(".png") && !textureFile.getName().endsWith("_held.png"));
+        int invalidTextures = materialTextures == null ? 0 : materialTextures.length - weaponTypes.size();
+
+        WeaponRegistry.registerWeaponsForMaterial(new MaterialEntry(toolMaterial, material_name, settings -> {
+          if (fireproof) settings.fireResistant();
+          return settings.rarity(rarity);
+        }), weaponTypes);
+        Constants.LOG.info("'{}' material found. adding {} weapons and skipping {} invalid ones", material_name, weaponTypes.size(), invalidTextures);
       } catch (Exception e) {
         Constants.LOG.error("Failed to load material file {} from pack {}: {}", file.getName(), packFolder.getName(), e.getMessage());
       }
@@ -305,25 +325,6 @@ public class MaterialPackLoader {
   public static float getReachBonus(ToolMaterial toolMaterial) {
     EarlyLoadedMaterial material = toolMaterialMap.get(toolMaterial);
     return material != null ? material.getReachBonus() : 0f;
-  }
-
-  /**
-   * Checks if a texture file exists for a weapon type in the material pack.
-   *
-   * @param materialName The name of the material
-   * @param weaponTypeId The weapon type ID (e.g., "sword", "axe")
-   * @return true if the texture file exists, false otherwise
-   */
-  public static boolean hasTextureForWeaponType(String materialName, String weaponTypeId) {
-    File packFolder = materialToPackFolder.get(materialName);
-    if (packFolder == null) {
-      return false;
-    }
-
-    // Texture path: assets/basicweapons/textures/item/{material_name}_{weapon_type}.png
-    String texturePath = ASSETS_PATH + "/basicweapons/textures/item/" + materialName + "_" + weaponTypeId + ".png";
-    File textureFile = new File(packFolder, texturePath);
-    return textureFile.exists() && textureFile.isFile();
   }
 
   /* Returns true if folder was created, false if not or if it already exists */
